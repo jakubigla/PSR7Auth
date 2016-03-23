@@ -3,7 +3,7 @@
 use PSR7Auth\Verifier;
 
 return [
-    'sexy_auth' => [
+    'psr7_auth' => [
         'middleware' => [
             'form' => [
                 'identity_key' => 'identity',
