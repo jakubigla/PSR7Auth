@@ -1,0 +1,35 @@
+{
+  "name":    "jakubigla/psr7-auth",
+  "license": "MIT",
+  "authors": [
+    {
+      "name":     "Jakub Igla",
+      "email":    "jakub.igla@gmail.com",
+      "homepage": "https://www.linkedin.com/in/jakubigla",
+      "role":     "Developer"
+    }
+  ],
+  "require": {
+    "php":                                 "^7.0",
+    "psr/http-message":                    "^1.0",
+    "sandrokeil/interop-config":           "^1.0",
+    "container-interop/container-interop": "^1.1",
+    "beberlei/assert":                     "^2.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.2"
+  },
+  "suggest": {
+    "zendframework/zend-crypt": "If you want to use BCryptPasswordVerifier"
+  },
+  "autoload": {
+    "psr-4": {
+      "PSR7Auth\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
