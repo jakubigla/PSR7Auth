@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PSR7Auth\IdentityProvider;
+namespace PSR7Auth\IdentityProvider\Mapper;
 
 use PSR7Auth\Domain\Entity\UserInterface;
 
 /**
- * Interface UserProviderInterface
+ * Interface BasicIdentityMapperInterface
  */
-interface UserProviderInterface
+interface BasicIdentityMapperInterface
 {
     const MODE_USERNAME = 'username';
     const MODE_EMAIL    = 'email';

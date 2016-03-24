@@ -5,48 +5,68 @@ declare(strict_types=1);
 namespace PSR7Auth\Container\Middleware;
 
 use BadFunctionCallException;
+use Interop\Config\ConfigurationTrait;
 use Interop\Container\ContainerInterface;
+use PSR7Auth\AccessRule\AccessRuleChain;
+use PSR7Auth\AccessRule\AccessRuleInterface;
 use PSR7Auth\ChainInterface;
+use PSR7Auth\IdentityProvider\IdentityProviderInterface;
+use PSR7Auth\Verifier\VerifierChain;
+use PSR7Auth\Verifier\VerifierInterface;
 
 /**
  * Trait AuthenticationFactoryTrait
  */
 trait AuthenticationFactoryTrait
 {
-    /** @var ChainInterface */
-    private $ruleChain;
-
-    /** @var ChainInterface */
-    private $verifierChain;
+    use ConfigurationTrait;
 
     /**
      * @param ContainerInterface $container
-     * @param array              $middlewareOptions
+     * @param array              $options
      *
-     * @return void
+     * @return IdentityProviderInterface
      */
-    protected function setupRules(ContainerInterface $container, array $middlewareOptions)
-    {
-        if (! array_key_exists('rules', $middlewareOptions) || ! is_array($middlewareOptions['rules'])) {
-            return;
-        }
+    abstract public function getIdentityProvider(
+        ContainerInterface $container,
+        array $options
+    ): IdentityProviderInterface;
 
-        $this->setupChainFromItems($this->ruleChain, $container, $middlewareOptions['rules']);
+    /**
+     * @inheritDoc
+     */
+    abstract public function defaultOptions(): array;
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $options
+     *
+     * @return AccessRuleInterface
+     */
+    public function getAccessRule(ContainerInterface $container, array $options): AccessRuleInterface
+    {
+        $accessRule = new AccessRuleChain();
+        $this->setupChainFromItems($accessRule, $container, $options['access_rule']);
     }
 
     /**
      * @param ContainerInterface $container
-     * @param array              $middlewareOptions
+     * @param array              $options
      *
-     * @return void
+     * @return VerifierInterface
      */
-    protected function setupVerifiers(ContainerInterface $container, array $middlewareOptions)
+    public function getVerifier(ContainerInterface $container, array $options): VerifierInterface
     {
-        if (! array_key_exists('verifiers', $middlewareOptions) || ! is_array($middlewareOptions['verifiers'])) {
-            return;
-        }
+        $accessRule = new VerifierChain();
+        $this->setupChainFromItems($accessRule, $container, $options['verifier']);
+    }
 
-        $this->setupChainFromItems($this->ruleChain, $container, $middlewareOptions['verifiers']);
+    /**
+     * @inheritdoc
+     */
+    public function dimensions()
+    {
+        return ['psr7_auth', 'middleware'];
     }
 
     /**

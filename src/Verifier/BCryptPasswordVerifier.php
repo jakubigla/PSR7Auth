@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PSR7Auth\Verifier;
 
 use Assert\Assertion;
+use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\Domain\Entity\UserInterface;
 use PSR7Auth\Exception\InvalidCredentialException;
 use Zend\Crypt\Password\Bcrypt;
@@ -14,7 +15,23 @@ use Zend\Crypt\Password\Bcrypt;
  */
 class BCryptPasswordVerifier implements VerifierInterface
 {
-    const COST = 10;
+    /** @var string */
+    private $credentialKey;
+
+    /** @var int */
+    private $cost;
+
+    /**
+     * BCryptPasswordVerifier constructor.
+     *
+     * @param string $credentialKey
+     * @param        $cost
+     */
+    public function __construct($credentialKey, $cost = 10)
+    {
+        $this->credentialKey = $credentialKey;
+        $this->cost          = $cost;
+    }
 
     /**
      * @todo: remove Zend\Crypt dependency. Use something different
@@ -22,14 +39,18 @@ class BCryptPasswordVerifier implements VerifierInterface
      * @inheritDoc
      * @throws InvalidCredentialException
      */
-    public function __invoke(UserInterface $user, array $options): int
+    public function __invoke(UserInterface $user, ServerRequestInterface $request)
     {
-        Assertion::keyExists($options, 'credential');
+        $data = $request->getParsedBody();
+        Assertion::isArray($data);
+        Assertion::keyExists($data, $this->credentialKey);
 
-        $BCrypt = new Bcrypt();
-        $BCrypt->setCost(self::COST);
+        $credential = $data[$this->credentialKey];
 
-        if (! $BCrypt->verify($options, $user->getPassword())) {
+        $bCrypt = new Bcrypt();
+        $bCrypt->setCost($this->cost);
+
+        if (! $bCrypt->verify($credential, $user->getPassword())) {
             throw new InvalidCredentialException();
         }
     }

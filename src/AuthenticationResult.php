@@ -4,69 +4,47 @@ declare(strict_types=1);
 
 namespace PSR7Auth;
 
-use PSR7Auth\Domain\Entity\GuestUser;
 use PSR7Auth\Domain\Entity\UserInterface;
 use PSR7Auth\Exception\BaseAuthenticationException;
+use PSR7Auth\Exception\IdentityNotFoundException;
 
 /**
  * Class AuthenticationResult
  */
-class AuthenticationResult
+class AuthenticationResult implements AuthenticationResultInterface
 {
-    /**
-     * Successful authentication
-     */
-    const CODE_SUCCESS = 1;
-
-    /**
-     * General Failure
-     */
-    const CODE_GENERAL_FAILURE = 0;
-
-    /**
-     * Failure due to identity not being found.
-     */
-    const CODE_IDENTITY_NOT_FOUND = -1;
-
-    /**
-     * Failure due to identity being ambiguous.
-     */
-    const CODE_IDENTITY_AMBIGUOUS = -2;
-
-    /**
-     * Failure due to invalid credential being supplied.
-     */
-    const CODE_INVALID_CREDENTIAL = -3;
-
-
-    /** @var UserInterface */
-    private $identity;
-
     /** @var string */
     private $message;
 
     /** @var int */
     private $code;
 
+    /** @var UserInterface */
+    private $identity;
+
     /**
      * AuthenticationResult constructor.
      *
-     * @param UserInterface $identity
      * @param string        $message
      * @param int           $code
+     * @param UserInterface $identity
      */
-    public function __construct(UserInterface $identity, string $message, int $code)
+    public function __construct(string $message, int $code, UserInterface $identity = null)
     {
-        $this->identity = $identity;
         $this->message  = $message;
         $this->code     = $code;
+        $this->identity = $identity;
     }
 
     /**
      * @return UserInterface
+     * @throws IdentityNotFoundException
      */
     public function getIdentity(): UserInterface
     {
+        if (! $this->identity instanceof UserInterface) {
+            throw new IdentityNotFoundException('No identity provided');
+        }
         return $this->identity;
     }
 
@@ -101,6 +79,6 @@ class AuthenticationResult
      */
     public static function fromException(BaseAuthenticationException $exception)
     {
-        return new self(new GuestUser('guest', ''), $exception->getMessage(), $exception->getCode());
+        return new self($exception->getMessage(), $exception->getCode());
     }
 }

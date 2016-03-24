@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace PSR7Auth\Rule;
+namespace PSR7Auth\AccessRule;
 
-use Psr\Http\Message\RequestInterface;
+use BadFunctionCallException;
+use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\ChainInterface;
 use SplDoublyLinkedList;
 
 /**
- * Class RuleChain
+ * Class AccessRuleChain
  */
-class RuleChain implements RuleInterface, ChainInterface
+class AccessRuleChain implements AccessRuleInterface, ChainInterface
 {
     /** @var SplDoublyLinkedList */
     private $collection;
@@ -30,10 +31,14 @@ class RuleChain implements RuleInterface, ChainInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(RequestInterface $request): bool
+    public function __invoke(ServerRequestInterface $request): bool
     {
         foreach ($this->collection as $callable) {
-            if (! is_callable($callable) || ! (bool)$callable($request)) {
+            if (! is_callable($callable)) {
+                throw new BadFunctionCallException('Provided rule is not callable');
+            }
+
+            if (! (bool)$callable($request)) {
                 return false;
             }
         }

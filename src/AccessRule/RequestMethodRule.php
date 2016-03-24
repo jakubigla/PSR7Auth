@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PSR7Auth\Rule;
+namespace PSR7Auth\AccessRule;
 
-use Psr\Http\Message\RequestInterface;
-use PSR7Auth\Exception\RuleException;
+use Psr\Http\Message\ServerRequestInterface;
+use PSR7Auth\Exception\AccessRuleException;
 
 /**
  * Class RequestMethodRule
  */
-class RequestMethodRule implements RuleInterface
+class RequestMethodRule implements AccessRuleInterface
 {
     /** @var array */
     private $whiteList;
@@ -28,12 +28,12 @@ class RequestMethodRule implements RuleInterface
     /**
      * @inheritDoc
      */
-    public function __invoke(RequestInterface $request): bool
+    public function __invoke(ServerRequestInterface $request): bool
     {
         $isSatisfied = array_search($request->getMethod(), $this->whiteList) !== false;
 
         if (! $isSatisfied) {
-            throw new RuleException('Invalid request method');
+            throw new AccessRuleException('Invalid request method');
         }
 
         return true;

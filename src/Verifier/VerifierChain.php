@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace PSR7Auth\Verifier;
 
 use BadFunctionCallException;
+use LogicException;
+use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\ChainInterface;
 use PSR7Auth\Domain\Entity\UserInterface;
-use PSR7Auth\Exception\LogicException;
 use SplDoublyLinkedList;
 
 /**
@@ -30,14 +31,15 @@ class VerifierChain implements VerifierInterface, ChainInterface
     }
 
     /**
-     * @param UserInterface $user
-     * @param array         $options
+     * @param UserInterface          $identity
+     * @param ServerRequestInterface $request
      *
      * @return void
+     *
      * @throws LogicException
      * @throws BadFunctionCallException
      */
-    public function __invoke(UserInterface $user, array $options)
+    public function __invoke(UserInterface $identity, ServerRequestInterface $request)
     {
         if (0 === count($this->collection)) {
             throw new LogicException('You have to provide at least one Verifier');
@@ -48,7 +50,7 @@ class VerifierChain implements VerifierInterface, ChainInterface
                 throw new BadFunctionCallException('Provided verifier is not callable');
             }
 
-            $callable($user, $options);
+            $callable($identity, $request);
         }
     }
 
