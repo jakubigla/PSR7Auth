@@ -10,7 +10,7 @@ use PSR7Auth\Exception\AccessRuleException;
 /**
  * Class RequestMethodRule
  */
-class RequestMethodRule implements AccessRuleInterface
+final class RequestMethodRule implements AccessRuleInterface
 {
     /** @var array */
     private $whiteList;

@@ -13,7 +13,7 @@ use PSR7Auth\IdentityProvider\Mapper\BasicIdentityMapperInterface;
 /**
  * Class FormIdentityProvider
  */
-class FormIdentityProvider implements IdentityProviderInterface
+final class FormIdentityProvider implements IdentityProviderInterface
 {
     /** @var BasicIdentityMapperInterface */
     private $mapper;
@@ -27,7 +27,7 @@ class FormIdentityProvider implements IdentityProviderInterface
      * @param BasicIdentityMapperInterface $mapper
      * @param string                       $identityKey
      */
-    public function __construct(BasicIdentityMapperInterface $mapper, $identityKey)
+    public function __construct(BasicIdentityMapperInterface $mapper, string $identityKey)
     {
         $this->mapper      = $mapper;
         $this->identityKey = $identityKey;
@@ -38,22 +38,27 @@ class FormIdentityProvider implements IdentityProviderInterface
      */
     public function __invoke(ServerRequestInterface $request): UserInterface
     {
-        $postData = $request->getParsedBody();
-        Assertion::isArray($postData);
+        $data = $request->getParsedBody();
+        Assertion::isArray($data);
+        Assertion::keyExists($data, $this->identityKey);
 
-        $identity = $postData[$this->identityKey];
+        $identity = $data[$this->identityKey];
         $fields   = [BasicIdentityMapperInterface::MODE_EMAIL, BasicIdentityMapperInterface::MODE_USERNAME];
         $user     = null;
 
         while (! $user instanceof UserInterface && count($fields) > 0) {
             $mode = array_shift($fields);
-            switch ($mode) {
-                case BasicIdentityMapperInterface::MODE_EMAIL:
-                    $user = $this->mapper->getByEmail($identity);
-                    break;
-                case BasicIdentityMapperInterface::MODE_USERNAME:
-                    $user = $this->mapper->getByUsername($identity);
-                    break;
+            try {
+                switch ($mode) {
+                    case BasicIdentityMapperInterface::MODE_EMAIL:
+                        $user = $this->mapper->getByEmail($identity);
+                        break;
+                    case BasicIdentityMapperInterface::MODE_USERNAME:
+                        $user = $this->mapper->getByUsername($identity);
+                        break;
+                }
+            } catch (IdentityNotFoundException $exception) {
+                continue;
             }
         }
 

@@ -13,7 +13,7 @@ use Zend\Crypt\Password\Bcrypt;
 /**
  * Class BCryptPasswordVerifier
  */
-class BCryptPasswordVerifier implements VerifierInterface
+final class BCryptPasswordVerifier implements VerifierInterface
 {
     /** @var string */
     private $credentialKey;

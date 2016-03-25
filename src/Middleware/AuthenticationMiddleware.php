@@ -65,9 +65,9 @@ final class AuthenticationMiddleware
             $this->verifier->__invoke($identity, $request);
 
             $result = new AuthenticationResult(
-                $identity,
                 'Authentication successful',
-                AuthenticationResult::CODE_SUCCESS
+                AuthenticationResult::CODE_SUCCESS,
+                $identity
             );
 
         } catch (BaseAuthenticationException $exception) {

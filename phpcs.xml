@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="psr7-auth">
+    <file>./src</file>
+    <file>./test</file>
+    <rule ref="PSR2"/>
+</ruleset>
+

@@ -39,7 +39,7 @@ interface AuthenticationResultInterface
     /**
      * Identity has invalid state to be authenticated
      */
-    const CODE_INVALID_IDENTITY_STATE = -4;
+    const CODE_NOT_VERIFIED = -4;
 
     /**
      * @return UserInterface

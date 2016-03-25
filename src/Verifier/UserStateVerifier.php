@@ -8,12 +8,12 @@ use InvalidArgumentException;
 use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\Domain\Entity\StatefulUserInterface;
 use PSR7Auth\Domain\Entity\UserInterface;
-use PSR7Auth\Exception\InvalidUserStateException;
+use PSR7Auth\Exception\VerifierException;
 
 /**
  * Class UserStateVerifier
  */
-class UserStateVerifier implements VerifierInterface
+final class UserStateVerifier implements VerifierInterface
 {
     /** @var array */
     private $allowedStates;
@@ -31,7 +31,7 @@ class UserStateVerifier implements VerifierInterface
     /**
      * @inheritDoc
      * @throws InvalidArgumentException
-     * @throws InvalidUserStateException
+     * @throws VerifierException
      */
     public function __invoke(UserInterface $user, ServerRequestInterface $request)
     {
@@ -40,7 +40,7 @@ class UserStateVerifier implements VerifierInterface
         }
 
         if (in_array($user->getState(), $this->allowedStates) !== false) {
-            throw new InvalidUserStateException();
+            throw new VerifierException();
         }
     }
 }

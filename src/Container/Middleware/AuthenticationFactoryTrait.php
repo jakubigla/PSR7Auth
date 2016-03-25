@@ -19,8 +19,6 @@ use PSR7Auth\Verifier\VerifierInterface;
  */
 trait AuthenticationFactoryTrait
 {
-    use ConfigurationTrait;
-
     /**
      * @param ContainerInterface $container
      * @param array              $options
@@ -31,11 +29,6 @@ trait AuthenticationFactoryTrait
         ContainerInterface $container,
         array $options
     ): IdentityProviderInterface;
-
-    /**
-     * @inheritDoc
-     */
-    abstract public function defaultOptions(): array;
 
     /**
      * @param ContainerInterface $container
@@ -59,14 +52,6 @@ trait AuthenticationFactoryTrait
     {
         $accessRule = new VerifierChain();
         $this->setupChainFromItems($accessRule, $container, $options['verifier']);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function dimensions()
-    {
-        return ['psr7_auth', 'middleware'];
     }
 
     /**
