@@ -1,14 +1,6 @@
-build:
-    environment:
-        php:
-            version: 7.0.3
-
-before_commands:
+git before_commands:
   - "composer update --prefer-source"
-tools: 
-  external_code_coverage:
-    enabled: true
-    timeout: 1800
+tools:
   php_analyzer: 
     enabled: true
     filter: 
