@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - 7
+  - hhvm
+
+before_script:
+  - composer update
+
+script:
+  - ./vendor/bin/phpunit --disallow-test-output --report-useless-tests --coverage-clover ./clover.xml
+  - ./vendor/bin/phpcs
+
+matrix:
+  allow_failures:
+    - php: hhvm
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover ./clover.xml
