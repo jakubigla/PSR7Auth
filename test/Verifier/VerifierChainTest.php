@@ -2,7 +2,6 @@
 
 namespace PSR7AuthTest\AccessRule;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\Domain\Entity\UserInterface;
 use PSR7Auth\Verifier\VerifierChain;
@@ -13,10 +12,10 @@ use stdClass;
  */
 class VerifierChainTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ServerRequestInterface | MockObject */
+    /** @var ServerRequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
 
-    /** @var UserInterface | MockObject */
+    /** @var UserInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $identity;
 
     public function setUp()
@@ -36,8 +35,13 @@ class VerifierChainTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifierChainIsQuietWithAttachedVerifier()
     {
-        /** @var callable $callable */
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $callable */
         $callable = self::getMock(stdClass::class, ['__invoke']);
+        $callable
+            ->expects(self::once())
+            ->method('__invoke')
+            ->willReturn(null);
+
         $chain = new VerifierChain();
         $chain->attach($callable);
         $chain->__invoke($this->identity, $this->request);
