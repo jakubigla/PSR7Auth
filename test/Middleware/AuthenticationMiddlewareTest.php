@@ -2,6 +2,7 @@
 
 namespace PSR7AuthTest\Middleware;
 
+use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\AccessRule\AccessRuleInterface;
@@ -10,33 +11,32 @@ use PSR7Auth\Exception\IdentityNotFoundException;
 use PSR7Auth\IdentityProvider\IdentityProviderInterface;
 use PSR7Auth\Middleware\AuthenticationMiddleware;
 use PSR7Auth\Verifier\VerifierInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use stdClass;
 
 /**
  * Class AuthenticationMiddlewareTest
  */
-class AuthenticationMiddlewareTest extends \PHPUnit_Framework_TestCase
+class AuthenticationMiddlewareTest extends PHPUnit_Framework_TestCase
 {
-    /** @var IdentityProviderInterface | MockObject */
+    /** @var IdentityProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $identityProvider;
 
-    /** @var AccessRuleInterface | MockObject*/
+    /** @var AccessRuleInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $accessRule;
 
-    /** @var VerifierInterface | MockObject*/
+    /** @var VerifierInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $verifier;
 
-    /** @var ServerRequestInterface | MockObject */
+    /** @var ServerRequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
 
-    /** @var ResponseInterface | MockObject */
+    /** @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $response;
 
-    /** @var callable | MockObject */
+    /** @var callable|\PHPUnit_Framework_MockObject_MockObject */
     private $nextMiddleware;
 
-    /** @var AuthenticationMiddleware | MockObject */
+    /** @var AuthenticationMiddleware|\PHPUnit_Framework_MockObject_MockObject */
     private $middleware;
 
     public function setUp()

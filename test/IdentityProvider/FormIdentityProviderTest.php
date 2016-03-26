@@ -2,25 +2,27 @@
 
 namespace PSR7AuthTest\IdentityProvider;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use PSR7Auth\Exception\IdentityNotFoundException;
 use PSR7Auth\IdentityProvider\FormIdentityProvider;
 use PSR7Auth\IdentityProvider\Mapper\BasicIdentityMapperInterface;
 
-class FormIdentityProviderTest extends \PHPUnit_Framework_TestCase
+class FormIdentityProviderTest extends PHPUnit_Framework_TestCase
 {
-    /** @var BasicIdentityMapperInterface | MockObject */
+    /** @var BasicIdentityMapperInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $mapper;
 
-    /** @var ServerRequestInterface | MockObject */
+    /** @var ServerRequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
 
-    /** @var FormIdentityProvider | MockObject */
+    /** @var FormIdentityProvider|\PHPUnit_Framework_MockObject_MockObject */
     private $provider;
 
+    /** @var string */
     private $identityKey;
 
+    /** @var string */
     private $identity;
 
     public function setUp()
