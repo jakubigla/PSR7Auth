@@ -1,4 +1,4 @@
-git before_commands:
+before_commands:
   - "composer update --prefer-source"
 tools:
   php_analyzer: 
