@@ -14,13 +14,15 @@
     "psr/http-message":                    "^1.0",
     "sandrokeil/interop-config":           "^1.0",
     "container-interop/container-interop": "^1.1",
-    "beberlei/assert":                     "^2.4"
+    "beberlei/assert":                     "^2.4",
+    "zendframework/zend-crypt":            "^2.6"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.2"
+    "phpunit/phpunit":           "^5.2",
+    "squizlabs/php_codesniffer": "^2.5"
   },
   "suggest": {
-    "zendframework/zend-crypt": "If you want to use BCryptPasswordVerifier"
+    "": "If you want to use BCryptPasswordVerifier"
   },
   "autoload": {
     "psr-4": {
