@@ -39,8 +39,8 @@ final class UserStateVerifier implements VerifierInterface
             throw new InvalidArgumentException('This verifier is meant to be used for state aware identity');
         }
 
-        if (in_array($user->getState(), $this->allowedStates) !== false) {
-            throw new VerifierException();
+        if (false === in_array($user->getState(), $this->allowedStates)) {
+            throw new VerifierException('User has invalid state to be authenticated');
         }
     }
 }
