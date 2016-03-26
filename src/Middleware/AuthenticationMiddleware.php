@@ -56,7 +56,7 @@ final class AuthenticationMiddleware
      */
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        if (false == $this->accessRule->__invoke($request)) {
+        if (false === $this->accessRule->__invoke($request)) {
             return $next($request, $response);
         }
 
